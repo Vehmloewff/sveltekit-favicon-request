@@ -1,5 +1,5 @@
 <script lang="ts">
-	let post = '';
+	let post = '7891879387591';
 </script>
 
 <input bind:value={post} />

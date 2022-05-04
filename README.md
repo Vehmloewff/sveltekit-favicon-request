@@ -1,38 +1,44 @@
-# create-svelte
+# SvelteKit favicon request bug
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+A minimal bug reproduction
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+```sh
+git clone https://github.com/Vehmloewff/sveltekit-favicon-request
+cd sveltekit-favicon-request
+npm i
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Open http://localhost:3000 and then hit the "Go to post" link.  Then look back in the console.
 
-To create a production version of your app:
+# Expected
 
-```bash
-npm run build
+The console to print...
+
+```
+> get a post with id "7891879387591" from database
 ```
 
-You can preview the production build with `npm run preview`.
+# Actual
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+...but the console actually prints:
+
+```
+> get a post with id "7891879387591" from database
+> get a post with id "favicon.png" from database
+```
+
+Firstly, you can verify in the browser that the client uses the right id.  It is the SSR that gets it wrong.  And why is there an SSR request anyway?  If we are going to ssr the page, lets do it before it is hydrated!
+
+# Something else
+
+If you start your browser directly at http://localhost:3000/blog/7891879387591 everything works correctly.
+
+```
+> get a post with id "7891879387591" from database
+> get a post with id "7891879387591" from database
+```
+
+One request to our `/blog/[post].json` endpoint for the ssr, and one for the client hydration.
+
+Thus, it appears that this issue just presents itself on SPA navigations.
