@@ -28,7 +28,7 @@ The console to print...
 > get a post with id "favicon.png" from database
 ```
 
-Firstly, you can verify in the browser that the client uses the right id.  It is the SSR that gets it wrong.  And why is there an SSR request anyway?  If we are going to ssr the page, lets do it before it is hydrated!
+Firstly, you can verify in the browser that the client uses the right id.  It is the SSR that gets it wrong.  And why is there an SSR request anyway?  If we are going to ssr the page, should it not be done before the page is hydrated ;D?
 
 # Something else
 
